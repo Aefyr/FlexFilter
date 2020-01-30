@@ -1,0 +1,2 @@
+include ':app', ':flexfilter-config-core', ':flexfilter-applier', ':flexfilter-builtin', ':flexfilter-config-ui', ':flexfilter'
+rootProject.name='FilterDialog Demo'
