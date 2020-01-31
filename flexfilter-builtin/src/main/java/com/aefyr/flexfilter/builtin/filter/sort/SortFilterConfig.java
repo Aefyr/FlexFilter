@@ -97,6 +97,8 @@ public class SortFilterConfig implements FilterConfig {
             clone.addOption(option.id(), option.name());
             if (option.isSelected())
                 clone.options().get(clone.options().size() - 1).setSelectedInternal(true);
+
+            option.setAscending(option.ascending());
         }
 
         return clone;
