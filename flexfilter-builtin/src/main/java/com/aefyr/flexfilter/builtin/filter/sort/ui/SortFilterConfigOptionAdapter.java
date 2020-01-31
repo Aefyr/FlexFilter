@@ -83,12 +83,13 @@ public class SortFilterConfigOptionAdapter extends RecyclerView.Adapter<SortFilt
         void bind(SortFilterConfigOptionAdapter adapter, SortFilterConfigOption option) {
             mAdapter = adapter;
 
-            String text = option.name().toString();
-            if (option.isSelected()) {
-                text += option.ascending() ? " ↑" : " ↓";
-            }
-            mChip.setText(text);
+            mChip.setText(option.name());
             mChip.setChecked(option.isSelected());
+
+            if (option.isSelected())
+                mChip.setChipIconResource(option.ascending() ? R.drawable.ic_arrow_up : R.drawable.ic_arrow_down);
+            else
+                mChip.setChipIcon(null);
         }
 
         void unbind() {
