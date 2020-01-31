@@ -28,6 +28,10 @@ public class SortFilterConfigOptionAdapter extends RecyclerView.Adapter<SortFilt
         notifyDataSetChanged();
     }
 
+    private SortFilterConfig getFilter() {
+        return mFilter;
+    }
+
     @NonNull
     @Override
     public OptionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,7 +40,12 @@ public class SortFilterConfigOptionAdapter extends RecyclerView.Adapter<SortFilt
 
     @Override
     public void onBindViewHolder(@NonNull OptionViewHolder holder, int position) {
-        holder.bind(mFilter.options().get(position));
+        holder.bind(this, mFilter.options().get(position));
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull OptionViewHolder holder) {
+        holder.unbind();
     }
 
     @Override
@@ -44,38 +53,46 @@ public class SortFilterConfigOptionAdapter extends RecyclerView.Adapter<SortFilt
         return mFilter != null ? mFilter.options().size() : 0;
     }
 
-    class OptionViewHolder extends RecyclerView.ViewHolder {
+    static class OptionViewHolder extends RecyclerView.ViewHolder {
 
         private Chip mChip;
 
-        public OptionViewHolder(@NonNull View itemView) {
+        private SortFilterConfigOptionAdapter mAdapter;
+
+        OptionViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mChip = (Chip) itemView;
 
             mChip.setOnClickListener((v) -> {
                 int adapterPosition = getAdapterPosition();
-                if (adapterPosition == RecyclerView.NO_POSITION)
+                if (adapterPosition == RecyclerView.NO_POSITION || mAdapter == null)
                     return;
 
-                SortFilterConfigOption option = mFilter.options().get(adapterPosition);
+                SortFilterConfigOption option = mAdapter.getFilter().options().get(adapterPosition);
 
                 if (option.isSelected())
                     option.setAscending(!option.ascending());
                 else
                     option.setSelected();
 
-                notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
             });
         }
 
-        void bind(SortFilterConfigOption option) {
+        void bind(SortFilterConfigOptionAdapter adapter, SortFilterConfigOption option) {
+            mAdapter = adapter;
+
             String text = option.name().toString();
             if (option.isSelected()) {
                 text += option.ascending() ? " ↑" : " ↓";
             }
             mChip.setText(text);
             mChip.setChecked(option.isSelected());
+        }
+
+        void unbind() {
+            mAdapter = null;
         }
     }
 }

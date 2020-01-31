@@ -38,6 +38,11 @@ public class SortFilterConfigViewHolder extends FilterConfigViewHolder<SortFilte
         mOptionsAdapter.setFilter(config);
     }
 
+    @Override
+    protected void onUnbind() {
+        mOptionsAdapter.setFilter(null);
+    }
+
     private RecyclerView.RecycledViewPool getViewPool() {
         RecyclerView.RecycledViewPool pool = getSharedObject("pool");
         if (pool == null) {

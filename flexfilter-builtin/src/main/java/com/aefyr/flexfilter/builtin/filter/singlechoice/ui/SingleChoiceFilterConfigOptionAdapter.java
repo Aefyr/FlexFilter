@@ -28,6 +28,11 @@ public class SingleChoiceFilterConfigOptionAdapter extends RecyclerView.Adapter<
         notifyDataSetChanged();
     }
 
+
+    private SingleChoiceFilterConfig getFilter() {
+        return mFilter;
+    }
+
     @NonNull
     @Override
     public OptionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,7 +41,12 @@ public class SingleChoiceFilterConfigOptionAdapter extends RecyclerView.Adapter<
 
     @Override
     public void onBindViewHolder(@NonNull OptionViewHolder holder, int position) {
-        holder.bind(mFilter.options().get(position));
+        holder.bind(this, mFilter.options().get(position));
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull OptionViewHolder holder) {
+        holder.unbind();
     }
 
     @Override
@@ -44,28 +54,35 @@ public class SingleChoiceFilterConfigOptionAdapter extends RecyclerView.Adapter<
         return mFilter != null ? mFilter.options().size() : 0;
     }
 
-    class OptionViewHolder extends RecyclerView.ViewHolder {
+    static class OptionViewHolder extends RecyclerView.ViewHolder {
 
         private Chip mChip;
 
-        public OptionViewHolder(@NonNull View itemView) {
+        private SingleChoiceFilterConfigOptionAdapter mAdapter;
+
+        OptionViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mChip = (Chip) itemView;
 
             mChip.setOnClickListener((v) -> {
                 int adapterPosition = getAdapterPosition();
-                if (adapterPosition == RecyclerView.NO_POSITION)
+                if (adapterPosition == RecyclerView.NO_POSITION || mAdapter == null)
                     return;
 
-                mFilter.options().get(adapterPosition).setSelected();
-                notifyDataSetChanged();
+                mAdapter.getFilter().options().get(adapterPosition).setSelected();
+                mAdapter.notifyDataSetChanged();
             });
         }
 
-        void bind(SingleChoiceFilterConfigOption option) {
+        void bind(SingleChoiceFilterConfigOptionAdapter adapter, SingleChoiceFilterConfigOption option) {
+            mAdapter = adapter;
             mChip.setText(option.name());
             mChip.setChecked(option.isSelected());
+        }
+
+        void unbind() {
+            mAdapter = null;
         }
     }
 }
