@@ -1,14 +1,68 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+ext.deps = [
+        'material'      : "com.google.android.material:material:1.2.0-alpha04",
+        'lifecycle'     : ["androidx.lifecycle:lifecycle-extensions:2.2.0", "android.arch.lifecycle:common-java8:2.1.0"],
+        'recycler'      : "androidx.recyclerview:recyclerview:1.1.0",
+        'appcompat'     : "androidx.appcompat:appcompat:1.1.0",
+        'javatest'   : "junit:junit:4.12",
+        'androidtest': ["androidx.test.ext:junit:1.1.1", "androidx.test.espresso:espresso-core:3.2.0"],
+        'flexbox': "com.google.android:flexbox:1.1.1"
+]
+
+ext.libversioncode = 1
+ext.libversion = "0.1-alpha"
+
+ext.configureModuleClosure = {
+    apply plugin: 'com.android.library'
+
+    apply plugin: 'com.github.dcendents.android-maven'
+    group ='com.github.aefyr'
+    version = libversion
+
+    android {
+        compileSdkVersion 29
+        buildToolsVersion "29.0.2"
+
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+
+        defaultConfig {
+            minSdkVersion 21
+            targetSdkVersion 29
+            versionCode libversioncode
+            versionName libversion
+
+            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+            consumerProguardFiles 'consumer-rules.pro'
+        }
+
+        buildTypes {
+            release {
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            }
+        }
+
+    }
+}
+
+def configureModule(Project project) {
+    configure(project, configureModuleClosure)
+}
+
 buildscript {
+
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
-        
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -18,7 +72,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+
     }
 }
 
