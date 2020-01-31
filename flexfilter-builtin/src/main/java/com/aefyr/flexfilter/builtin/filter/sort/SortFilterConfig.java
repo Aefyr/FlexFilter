@@ -95,10 +95,12 @@ public class SortFilterConfig implements FilterConfig {
         SortFilterConfig clone = new SortFilterConfig(mId, mName);
         for (SortFilterConfigOption option : mOptions) {
             clone.addOption(option.id(), option.name());
-            if (option.isSelected())
-                clone.options().get(clone.options().size() - 1).setSelectedInternal(true);
 
-            option.setAscending(option.ascending());
+            SortFilterConfigOption cloneOption = clone.options().get(clone.options().size() - 1);
+            if (option.isSelected())
+                cloneOption.setSelectedInternal(true);
+
+            cloneOption.setAscending(option.ascending());
         }
 
         return clone;
