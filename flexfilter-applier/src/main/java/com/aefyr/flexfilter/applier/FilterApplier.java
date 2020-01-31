@@ -1,29 +1,14 @@
 package com.aefyr.flexfilter.applier;
 
-import com.aefyr.flexfilter.config.core.ComplexFilterConfig;
-import com.aefyr.flexfilter.config.core.FilterConfig;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class FilterApplier<T> {
 
-    private ComplexFilterConfig mFilterConfig;
-    private CustomFilterFactory<T> mFactory;
-
-    public FilterApplier(ComplexFilterConfig config, CustomFilterFactory<T> factory) {
-        mFilterConfig = config;
-        mFactory = factory;
-    }
-
-    public List<T> filter(List<T> list) {
+    public List<T> apply(ComplexCustomFilter<T> filter, List<T> list) {
         List<T> filteredList = new ArrayList<>();
 
-        ArrayList<CustomFilter<T>> customFilters = new ArrayList<>();
-
-        for (FilterConfig filterConfig : mFilterConfig.filters()) {
-            customFilters.add(mFactory.createCustomFilter(filterConfig));
-        }
+        List<CustomFilter<T>> customFilters = filter.flatMap();
 
         for (T t : list) {
             boolean filteredOut = false;

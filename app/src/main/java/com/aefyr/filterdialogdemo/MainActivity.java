@@ -1,9 +1,19 @@
 package com.aefyr.filterdialogdemo;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.aefyr.filterdialogdemo.adapter.SampleItemAdapter;
+import com.aefyr.filterdialogdemo.model.SampleItem;
+import com.aefyr.flexfilter.applier.ComplexCustomFilter;
+import com.aefyr.flexfilter.applier.CustomFilter;
+import com.aefyr.flexfilter.applier.LiveFilterApplier;
 import com.aefyr.flexfilter.builtin.DefaultFilterConfigViewHolderFactory;
 import com.aefyr.flexfilter.builtin.filter.singlechoice.SingleChoiceFilterConfig;
 import com.aefyr.flexfilter.builtin.filter.sort.SortFilterConfig;
@@ -22,6 +32,43 @@ public class MainActivity extends AppCompatActivity implements FilterDialog.OnAp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        RecyclerView recycler = findViewById(R.id.rv_sample);
+        SampleItemAdapter adapter = new SampleItemAdapter(this);
+
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+        recycler.setAdapter(adapter);
+
+
+        ArrayList<SampleItem> items = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            items.add(new SampleItem("Item " + i));
+        }
+
+        adapter.setItems(items);
+
+
+        LiveFilterApplier<SampleItem> liveFilter = new LiveFilterApplier<>();
+        liveFilter.asLiveData().observe(this, adapter::setItems);
+
+
+        EditText editText = findViewById(R.id.editText);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                liveFilter.apply(getComplexFilter(s.toString()), items);
+            }
+        });
 
         List<FilterConfig> filters = new ArrayList<>();
         filters.add(new SortFilterConfig("bb", "Sort")
@@ -57,6 +104,16 @@ public class MainActivity extends AppCompatActivity implements FilterDialog.OnAp
         findViewById(R.id.tv_aaaa).setOnClickListener((v) -> {
             FilterDialog.newInstance("Select filters", mConfig, DefaultFilterConfigViewHolderFactory.class).show(getSupportFragmentManager(), null);
         });
+    }
+
+    private ComplexCustomFilter<SampleItem> getComplexFilter(String query) {
+        return new ComplexCustomFilter.Builder<SampleItem>()
+                .add(new CustomFilter<SampleItem>() {
+                    @Override
+                    public boolean filterSimple(SampleItem item) {
+                        return !item.text.startsWith(query);
+                    }
+                }).build();
     }
 
     @Override
