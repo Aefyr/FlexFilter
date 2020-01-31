@@ -11,8 +11,8 @@ ext.deps = [
         'androidxannotations': "androidx.annotation:annotation:1.1.0"
 ]
 
-ext.libversioncode = 4
-ext.libversion = "0.4-alpha"
+ext.libversioncode = 5
+ext.libversion = "0.5-alpha"
 
 ext.configureModuleClosure = {
     apply plugin: 'com.android.library'
