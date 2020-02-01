@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FlexFilter Config UI</string>
+    <string name="app_name" translatable="false">FlexFilter Config UI</string>
 
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
