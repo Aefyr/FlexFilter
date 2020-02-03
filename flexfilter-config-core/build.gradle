@@ -5,4 +5,5 @@ dependencies {
 
     testImplementation deps.javatest
     androidTestImplementation deps.androidtest
+    implementation deps.androidxannotations
 }

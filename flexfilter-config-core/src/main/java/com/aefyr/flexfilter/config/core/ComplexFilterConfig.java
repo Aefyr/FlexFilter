@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.aefyr.flexfilter.config.core.util.ParcelCompat;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class ComplexFilterConfig implements Parcelable {
 
     protected ComplexFilterConfig(Parcel in) {
         //TODO do something about classloader
-        mFilterConfigs = in.readParcelableList(new ArrayList<>(), FilterConfig.class.getClassLoader());
+        mFilterConfigs = ParcelCompat.readParcelableList(in, new ArrayList<>(), FilterConfig.class.getClassLoader());
     }
 
     public static final Creator<ComplexFilterConfig> CREATOR = new Creator<ComplexFilterConfig>() {
@@ -55,6 +57,6 @@ public class ComplexFilterConfig implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelableList(mFilterConfigs, flags);
+        ParcelCompat.writeParcelableList(dest, mFilterConfigs, flags);
     }
 }

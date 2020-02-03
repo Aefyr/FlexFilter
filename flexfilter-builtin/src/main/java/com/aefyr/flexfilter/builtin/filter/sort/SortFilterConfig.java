@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.text.TextUtils;
 
 import com.aefyr.flexfilter.config.core.FilterConfig;
+import com.aefyr.flexfilter.config.core.util.ParcelCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class SortFilterConfig implements FilterConfig {
         mId = in.readString();
         mName = TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(in);
 
-        mOptions = in.readParcelableList(new ArrayList<>(), SortFilterConfigOption.class.getClassLoader());
+        mOptions = ParcelCompat.readParcelableList(in, new ArrayList<>(), SortFilterConfigOption.class.getClassLoader());
         for (SortFilterConfigOption option : mOptions) {
             option.setFilter(this);
         }
@@ -87,7 +88,7 @@ public class SortFilterConfig implements FilterConfig {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mId);
         TextUtils.writeToParcel(mName, dest, flags);
-        dest.writeParcelableList(mOptions, flags);
+        ParcelCompat.writeParcelableList(dest, mOptions, flags);
     }
 
     @Override
