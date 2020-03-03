@@ -30,6 +30,7 @@ public class SortFilterConfigViewHolder extends FilterConfigViewHolder<SortFilte
 
         optionsRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
         optionsRecycler.setAdapter(mOptionsAdapter);
+        optionsRecycler.setItemAnimator(null);
     }
 
     @Override
