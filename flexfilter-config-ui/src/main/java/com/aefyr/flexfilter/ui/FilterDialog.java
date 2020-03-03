@@ -91,6 +91,7 @@ public class FilterDialog extends BaseBottomSheetDialogFragment {
         });
 
         bindViewModel();
+        getPositiveButton().requestFocus();
     }
 
     private void bindViewModel() {

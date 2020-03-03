@@ -21,6 +21,7 @@ public class SortFilterConfigOptionAdapter extends RecyclerView.Adapter<SortFilt
 
     public SortFilterConfigOptionAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
+        setHasStableIds(true);
     }
 
     public void setFilter(SortFilterConfig filter) {
@@ -51,6 +52,11 @@ public class SortFilterConfigOptionAdapter extends RecyclerView.Adapter<SortFilt
     @Override
     public int getItemCount() {
         return mFilter != null ? mFilter.options().size() : 0;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mFilter.options().get(position).id().hashCode();
     }
 
     static class OptionViewHolder extends RecyclerView.ViewHolder {

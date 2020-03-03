@@ -21,6 +21,7 @@ public class SingleChoiceFilterConfigOptionAdapter extends RecyclerView.Adapter<
 
     public SingleChoiceFilterConfigOptionAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
+        setHasStableIds(true);
     }
 
     public void setFilter(SingleChoiceFilterConfig filter) {
@@ -52,6 +53,11 @@ public class SingleChoiceFilterConfigOptionAdapter extends RecyclerView.Adapter<
     @Override
     public int getItemCount() {
         return mFilter != null ? mFilter.options().size() : 0;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mFilter.options().get(position).id().hashCode();
     }
 
     static class OptionViewHolder extends RecyclerView.ViewHolder {
