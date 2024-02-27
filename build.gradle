@@ -58,7 +58,8 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        //jcenter() //not working anymore 
+        mavenCentral()
 
     }
     dependencies {
